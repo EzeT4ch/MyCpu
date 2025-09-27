@@ -7,8 +7,8 @@ CPU cpu = CPUFactory.CreateCPUWithComponents(out IMemory memory, out IRegisters 
 
 byte[] program = new byte[]
 {
-    (byte)OpCode.LDA, 0x00, // ACC = Mem[0]
-    (byte)OpCode.ADD, 0x01, // ACC += Mem[1]
+    (byte)OpCode.LDA, 0x01, // ACC = Mem[0]
+    (byte)OpCode.SUB, 0x00, // ACC += Mem[1]
     (byte)OpCode.STA, 0x02, // Mem[2] = ACC
     (byte)OpCode.HLT        // Stop
 };
