@@ -19,17 +19,17 @@ namespace MyCpu.Domain.Core
         /// significant 8 bits are returned.</returns>
         public AluResult Add(byte a, byte b)
         {
-            int result = a + b;
+            int sum = a + b;
+            byte result = (byte)(sum);
             Flags flags = Flags.None;
 
             // Update flags
-            if ((result & 0xFF) == 0) flags |= Flags.Zero;
-            if ((result & 0x80) != 0) flags |= Flags.Negative;
+            if (result == 0) flags |= Flags.Zero;
+            if (result != 0) flags |= Flags.Negative;
             if (result > 0xFF) flags |= Flags.Carry;
             if (((a ^ result) & (b ^ result) & 0x80) != 0) flags |= Flags.Overflow;
 
-
-            return new AluResult((byte)(result & 0xFF), flags);
+            return new AluResult(result, flags);
         }
 
         /// <summary>
@@ -45,15 +45,16 @@ namespace MyCpu.Domain.Core
         /// result is truncated to fit within the byte range (0–255).</returns>
         public AluResult Sub(byte a, byte b)
         {
-            int result = a - b;
+            int dif = a - b;
+            byte result = (byte)(dif);
             Flags flags = Flags.None;
 
-            if ((result & 0xFF) == 0) flags |= Flags.Zero;
-            if ((result & 0x80) != 0) flags |= Flags.Negative;
+            if (result == 0) flags |= Flags.Zero;
+            if (result != 0) flags |= Flags.Negative;
             if (result < 0) flags |= Flags.Carry;
             if (((a ^ b) & (a ^ result) & 0x80) != 0) flags |= Flags.Overflow;
 
-            return new AluResult((byte)(result & 0xFF), flags);
+            return new AluResult(result, flags);
         }
 
         /// <summary>
