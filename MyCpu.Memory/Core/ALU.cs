@@ -1,16 +1,11 @@
 ﻿using MyCpu.Shared.Enums;
 using MyCpu.Shared.Interfaces;
+using MyCpu.Shared.Structures;
 
 namespace MyCpu.Domain.Core
 {
     public class ALU : IALU
     {
-        private readonly IRegisters _registers;
-
-        public ALU(IRegisters registers)
-        {
-            _registers = registers;
-        }
 
         /// <summary>
         /// Adds two 8-bit unsigned values and updates processor flags based on the result.
@@ -22,17 +17,19 @@ namespace MyCpu.Domain.Core
         /// <param name="b">The second operand to add. Represents an 8-bit unsigned value.</param>
         /// <returns>The 8-bit unsigned result of adding <paramref name="a"/> and <paramref name="b"/>. Only the least
         /// significant 8 bits are returned.</returns>
-        public byte Add(byte a, byte b)
+        public AluResult Add(byte a, byte b)
         {
             int result = a + b;
+            Flags flags = Flags.None;
 
             // Update flags
-            _registers.SetFlag(Flags.Carry, result > 0xFF);
-            _registers.SetFlag(Flags.Zero, (result & 0xFF) == 0);
-            _registers.SetFlag(Flags.Negative, (result & 0x80) != 0);
-            _registers.SetFlag(Flags.Overflow, ((a ^ result) & (b ^ result) & 0x80) != 0);
+            if ((result & 0xFF) == 0) flags |= Flags.Zero;
+            if ((result & 0x80) != 0) flags |= Flags.Negative;
+            if (result > 0xFF) flags |= Flags.Carry;
+            if (((a ^ result) & (b ^ result) & 0x80) != 0) flags |= Flags.Overflow;
 
-            return (byte)(result & 0xFF);
+
+            return new AluResult((byte)(result & 0xFF), flags);
         }
 
         /// <summary>
@@ -46,17 +43,17 @@ namespace MyCpu.Domain.Core
         /// <param name="b">The subtrahend. The 8-bit unsigned integer to subtract from <paramref name="a"/>.</param>
         /// <returns>An 8-bit unsigned integer representing the result of <paramref name="a"/> minus <paramref name="b"/>. The
         /// result is truncated to fit within the byte range (0–255).</returns>
-        public byte Sub(byte a, byte b)
+        public AluResult Sub(byte a, byte b)
         {
             int result = a - b;
+            Flags flags = Flags.None;
 
-            // Update flags
-            _registers.SetFlag(Flags.Carry, result < 0);
-            _registers.SetFlag(Flags.Zero, (result & 0xFF) == 0);
-            _registers.SetFlag(Flags.Negative, (result & 0x80) != 0);
-            _registers.SetFlag(Flags.Overflow, ((a ^ b) & (a ^ result) & 0x80) != 0);
+            if ((result & 0xFF) == 0) flags |= Flags.Zero;
+            if ((result & 0x80) != 0) flags |= Flags.Negative;
+            if (result < 0) flags |= Flags.Carry;
+            if (((a ^ b) & (a ^ result) & 0x80) != 0) flags |= Flags.Overflow;
 
-            return (byte)(result & 0xFF);
+            return new AluResult((byte)(result & 0xFF), flags);
         }
 
         /// <summary>
@@ -66,11 +63,14 @@ namespace MyCpu.Domain.Core
         /// <param name="b">The second operand for the bitwise AND operation.</param>
         /// <returns>A byte value representing the result of the bitwise AND operation between <paramref name="a"/> and <paramref
         /// name="b"/>.</returns>
-        public byte And(byte a, byte b)
+        public AluResult And(byte a, byte b)
         {
             byte result = (byte)(a & b);
-            UpdateLogicFlags(result);
-            return result;
+            Flags flags = Flags.None;
+            
+            if(result == 0) flags |= Flags.Zero;
+            if((result & 0x80) != 0) flags |= Flags.Negative;
+            return new AluResult(result, flags);
         }
 
         /// <summary>
@@ -81,11 +81,14 @@ namespace MyCpu.Domain.Core
         /// <param name="a">The first operand for the bitwise OR operation.</param>
         /// <param name="b">The second operand for the bitwise OR operation.</param>
         /// <returns>A byte value representing the result of the bitwise OR of the two operands.</returns>
-        public byte Or(byte a, byte b)
+        public AluResult Or(byte a, byte b)
         {
             byte result = (byte)(a | b);
-            UpdateLogicFlags(result);
-            return result;
+            Flags flags = Flags.None;
+
+            if(result == 0) flags |= Flags.Zero;
+            if((result & 0x80) != 0) flags |= Flags.Negative;
+            return new AluResult(result, flags);
         }
 
         /// <summary>
@@ -94,11 +97,13 @@ namespace MyCpu.Domain.Core
         /// <param name="a">The first operand for the bitwise XOR operation.</param>
         /// <param name="b">The second operand for the bitwise XOR operation.</param>
         /// <returns>A byte value that is the result of the bitwise XOR of the two operands.</returns>
-        public byte Xor(byte a, byte b)
+        public AluResult Xor(byte a, byte b)
         {
             byte result = (byte)(a ^ b);
-            UpdateLogicFlags(result);
-            return result;
+            Flags flags = Flags.None;
+            if(result == 0) flags |= Flags.Zero;
+            if((result & 0x80) != 0) flags |= Flags.Negative;
+            return new AluResult(result, flags);
         }
 
         /// <summary>
@@ -106,27 +111,13 @@ namespace MyCpu.Domain.Core
         /// </summary>
         /// <param name="a">The value for which to compute the bitwise complement.</param>
         /// <returns>A byte value representing the bitwise complement of <paramref name="a"/>.</returns>
-        public byte Not(byte a)
+        public AluResult Not(byte a)
         {
             byte result = (byte)~a;
-            UpdateLogicFlags(result);
-            return result;
-        }
-
-        /// <summary>
-        /// Updates the processor status flags based on the specified result value.
-        /// </summary>
-        /// <remarks>This method sets the Zero flag if <paramref name="result"/> is zero, and the Negative
-        /// flag if the most significant bit of <paramref name="result"/> is set. The Carry and Overflow flags are
-        /// cleared.</remarks>
-        /// <param name="result">The result value used to determine the state of the Zero and Negative flags. The value is interpreted as an
-        /// 8-bit unsigned integer.</param>
-        private void UpdateLogicFlags(byte result)
-        {
-            _registers.SetFlag(Flags.Zero, result == 0);
-            _registers.SetFlag(Flags.Negative, (result & 0x80) != 0);
-            _registers.SetFlag(Flags.Carry, false);
-            _registers.SetFlag(Flags.Overflow, false);
+            Flags flags = Flags.None;
+            if (result == 0) flags |= Flags.Zero;
+            if ((result & 0x80) != 0) flags |= Flags.Negative;
+            return new AluResult(result, flags);
         }
     }
 }

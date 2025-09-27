@@ -1,12 +1,14 @@
-﻿namespace MyCpu.Shared.Interfaces
+﻿using MyCpu.Shared.Structures;
+
+namespace MyCpu.Shared.Interfaces
 {
     public interface IALU
     {
-        byte Add(byte a, byte b);
-        byte Sub(byte a, byte b);
-        byte And(byte a, byte b);
-        byte Or(byte a, byte b);
-        byte Xor(byte a, byte b);
-        byte Not(byte a);
+        AluResult Add(byte a, byte b);
+        AluResult Sub(byte a, byte b);
+        AluResult And(byte a, byte b);
+        AluResult Or(byte a, byte b);
+        AluResult Xor(byte a, byte b);
+        AluResult Not(byte a);
     }
 }
