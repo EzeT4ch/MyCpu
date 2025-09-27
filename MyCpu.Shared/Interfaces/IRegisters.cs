@@ -4,7 +4,7 @@ namespace MyCpu.Shared.Interfaces
 {
     public interface IRegisters
     {
-        byte ACC { get; set; }
+        IRegisterAcc ACC { get; set; }
         IProgramCounter PC { get; set; }
         byte IR { get; set; }
         byte SP { get; set; }

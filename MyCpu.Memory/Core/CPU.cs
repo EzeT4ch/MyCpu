@@ -57,22 +57,22 @@ namespace MyCpu.Domain.Core
                 case OpCode.LDA:
                     {
                         byte addr = ReadNextByte();
-                        _registers.ACC = _memory.ReadByte(addr);
+                        _registers.ACC.Value = _memory.ReadByte(addr);
                         break;
                     }
 
                 case OpCode.STA:
                     {
                         byte addr = ReadNextByte();
-                        _memory.WriteByte(addr, _registers.ACC);
+                        _memory.WriteByte(addr, _registers.ACC.Value);
                         break;
                     }
 
                 case OpCode.ADD:
                     {
                         byte addr = ReadNextByte();
-                        AluResult result = _alu.Add(_registers.ACC, _memory.ReadByte(addr));
-                        _registers.ACC = result.Value;
+                        AluResult result = _alu.Add(_registers.ACC.Value, _memory.ReadByte(addr));
+                        _registers.ACC.Value = result.Value;
                         _registers.ApplyFlags(result.Flags);
                         break;
                     }
@@ -80,8 +80,8 @@ namespace MyCpu.Domain.Core
                 case OpCode.SUB:
                     {
                         byte addr = ReadNextByte();
-                        AluResult result = _alu.Sub(_registers.ACC, _memory.ReadByte(addr));
-                        _registers.ACC = result.Value;
+                        AluResult result = _alu.Sub(_registers.ACC.Value, _memory.ReadByte(addr));
+                        _registers.ACC.Value = result.Value;
                         _registers.ApplyFlags(result.Flags);
                         break;
                     }
@@ -96,7 +96,9 @@ namespace MyCpu.Domain.Core
                 case OpCode.CMP:
                     {
                         byte addr = ReadNextByte();
-                        _alu.Sub(_registers.ACC, _memory.ReadByte(addr)); // afecta solo flags
+                        AluResult cmpResult = _alu.Sub(_registers.ACC.Value, _memory.ReadByte(addr));
+                        _registers.ApplyFlags(cmpResult.Flags); // solo flags, ACC no cambia
+
                         break;
                     }
 
@@ -107,8 +109,8 @@ namespace MyCpu.Domain.Core
                 case OpCode.AND:
                     {
                         byte addr = ReadNextByte();
-                        AluResult result = _alu.And(_registers.ACC, _memory.ReadByte(addr));
-                        _registers.ACC = result.Value;
+                        AluResult result = _alu.And(_registers.ACC.Value, _memory.ReadByte(addr));
+                        _registers.ACC.Value = result.Value;
                         _registers.ApplyFlags(result.Flags);
                         break;
                     }
@@ -116,8 +118,8 @@ namespace MyCpu.Domain.Core
                 case OpCode.OR:
                     {
                         byte addr = ReadNextByte();
-                        AluResult result = _alu.Or(_registers.ACC, _memory.ReadByte(addr));
-                        _registers.ACC = result.Value;
+                        AluResult result = _alu.Or(_registers.ACC.Value, _memory.ReadByte(addr));
+                        _registers.ACC.Value = result.Value;
                         _registers.ApplyFlags(result.Flags);
                         break;
                     }
@@ -125,15 +127,15 @@ namespace MyCpu.Domain.Core
                 case OpCode.XOR:
                     {
                         byte addr = ReadNextByte();
-                        AluResult result = _alu.Xor(_registers.ACC, _memory.ReadByte(addr));
-                        _registers.ACC = result.Value;
+                        AluResult result = _alu.Xor(_registers.ACC.Value, _memory.ReadByte(addr));
+                        _registers.ACC.Value = result.Value;
                         _registers.ApplyFlags(result.Flags);
                         break;
                     }
                 case OpCode.NOT:
                     {
-                        AluResult result = _alu.Not(_registers.ACC);
-                        _registers.ACC = result.Value;
+                        AluResult result = _alu.Not(_registers.ACC.Value);
+                        _registers.ACC.Value = result.Value;
                         _registers.ApplyFlags(result.Flags);
                         break;
                     }
