@@ -1,6 +1,6 @@
-﻿using MyCpu.Domain.Enums;
+﻿using MyCpu.Shared.Enums;
 
-namespace MyCpu.Domain.Interfaces
+namespace MyCpu.Shared.Interfaces
 {
     public interface IRegisters
     {

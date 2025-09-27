@@ -1,4 +1,4 @@
-﻿namespace MyCpu.Domain.Enums
+﻿namespace MyCpu.Shared.Enums
 {
     [Flags]
     public enum Flags : byte

@@ -1,5 +1,5 @@
-﻿using MyCpu.Domain.Enums;
-using MyCpu.Domain.Interfaces;
+﻿using MyCpu.Shared.Enums;
+using MyCpu.Shared.Interfaces;
 
 namespace MyCpu.Domain.Core
 {

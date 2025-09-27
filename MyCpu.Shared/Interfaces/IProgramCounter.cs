@@ -1,4 +1,4 @@
-﻿namespace MyCpu.Domain.Interfaces
+﻿namespace MyCpu.Shared.Interfaces
 {
     public interface IProgramCounter
     {

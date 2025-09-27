@@ -1,3 +1,5 @@
 <Solution>
+  <Project Path="MyCpu.Application/MyCpu.Application.csproj" />
   <Project Path="MyCpu.Memory/MyCpu.Domain.csproj" />
+  <Project Path="MyCpu.Shared/MyCpu.Shared.csproj" />
 </Solution>

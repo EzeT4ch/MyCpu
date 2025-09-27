@@ -1,4 +1,4 @@
-﻿using MyCpu.Domain.Interfaces;
+﻿using MyCpu.Shared.Interfaces;
 
 namespace MyCpu.Domain.Core
 {

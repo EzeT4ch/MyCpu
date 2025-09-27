@@ -1,7 +1,7 @@
 ﻿using MyCpu.Domain.Core;
-using MyCpu.Domain.Interfaces;
+using MyCpu.Shared.Interfaces;
 
-namespace MyCpu.Domain.Builder
+namespace MyCpu.Application.Builder
 {
     public class CPUBuilder
     {
