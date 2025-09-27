@@ -1,5 +1,6 @@
 ﻿using MyCpu.Shared.Enums;
 using MyCpu.Shared.Interfaces;
+using MyCpu.Shared.Structures;
 
 namespace MyCpu.Domain.Core
 {
@@ -70,14 +71,18 @@ namespace MyCpu.Domain.Core
                 case OpCode.ADD:
                     {
                         byte addr = ReadNextByte();
-                        _registers.ACC = _alu.Add(_registers.ACC, _memory.ReadByte(addr));
+                        AluResult result = _alu.Add(_registers.ACC, _memory.ReadByte(addr));
+                        _registers.ACC = result.Value;
+                        _registers.ApplyFlags(result.Flags);
                         break;
                     }
 
                 case OpCode.SUB:
                     {
                         byte addr = ReadNextByte();
-                        _registers.ACC = _alu.Sub(_registers.ACC, _memory.ReadByte(addr));
+                        AluResult result = _alu.Sub(_registers.ACC, _memory.ReadByte(addr));
+                        _registers.ACC = result.Value;
+                        _registers.ApplyFlags(result.Flags);
                         break;
                     }
 
@@ -102,26 +107,34 @@ namespace MyCpu.Domain.Core
                 case OpCode.AND:
                     {
                         byte addr = ReadNextByte();
-                        _registers.ACC = _alu.And(_registers.ACC, _memory.ReadByte(addr));
+                        AluResult result = _alu.And(_registers.ACC, _memory.ReadByte(addr));
+                        _registers.ACC = result.Value;
+                        _registers.ApplyFlags(result.Flags);
                         break;
                     }
 
                 case OpCode.OR:
                     {
                         byte addr = ReadNextByte();
-                        _registers.ACC = _alu.Or(_registers.ACC, _memory.ReadByte(addr));
+                        AluResult result = _alu.Or(_registers.ACC, _memory.ReadByte(addr));
+                        _registers.ACC = result.Value;
+                        _registers.ApplyFlags(result.Flags);
                         break;
                     }
 
                 case OpCode.XOR:
                     {
                         byte addr = ReadNextByte();
-                        _registers.ACC = _alu.Xor(_registers.ACC, _memory.ReadByte(addr));
+                        AluResult result = _alu.Xor(_registers.ACC, _memory.ReadByte(addr));
+                        _registers.ACC = result.Value;
+                        _registers.ApplyFlags(result.Flags);
                         break;
                     }
                 case OpCode.NOT:
                     {
-                        _registers.ACC = _alu.Not(_registers.ACC);
+                        AluResult result = _alu.Not(_registers.ACC);
+                        _registers.ACC = result.Value;
+                        _registers.ApplyFlags(result.Flags);
                         break;
                     }
 

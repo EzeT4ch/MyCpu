@@ -9,7 +9,7 @@ public static class CPUFactory
     {
         Registers registers = new ();
         Domain.Core.Memory memory = new (memorySize);
-        ALU alu = new (registers);
+        ALU alu = new ();
 
         return new CPU(memory, registers, alu);
     }
@@ -18,7 +18,7 @@ public static class CPUFactory
     {
         registers = new Registers();
         memory = new Memory(memorySize);
-        ALU alu = new (registers);
+        ALU alu = new ();
 
         return new (memory, registers, alu);
     }

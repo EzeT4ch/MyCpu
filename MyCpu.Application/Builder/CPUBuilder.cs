@@ -37,7 +37,7 @@ namespace MyCpu.Application.Builder
         {
             _registers ??= new Registers();
             _memory ??= new Memory(256);
-            _alu ??= new ALU(_registers);
+            _alu ??= new ALU();
 
             return new CPU(_memory, _registers, _alu);
         }

@@ -34,13 +34,19 @@ namespace MyCpu.Domain.Core
             ACC = 0;
             PC.Reset();
             IR = 0;
-            SP = 0xFF; // convención: stack crece hacia abajo
+            SP = 0xFF; // convención: stack crece hacia abajo o eso encontre
             Flags = Flags.None;
         }
 
         public override string ToString()
         {
             return $"ACC={ACC:X2} PC={PC:X2} SP={SP:X2} Flags=[{Flags}]";
+        }
+
+        public void ApplyFlags(Flags flags)
+        {
+            Flags &= ~(Flags.Zero | Flags.Carry | Flags.Negative | Flags.Overflow);
+            Flags |= flags;
         }
     }
 }

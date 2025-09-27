@@ -10,6 +10,7 @@ namespace MyCpu.Shared.Interfaces
         byte SP { get; set; }
         Flags Flags { get; }
         void SetFlag(Flags flag, bool value);
+        void ApplyFlags(Flags flags);
         bool GetFlag(Flags flag);
         void Clear();
     }
