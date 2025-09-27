@@ -88,9 +88,42 @@ namespace MyCpu.Domain.Core
                         break;
                     }
 
+                case OpCode.CMP:
+                    {
+                        byte addr = ReadNextByte();
+                        _alu.Sub(_registers.ACC, _memory.ReadByte(addr)); // afecta solo flags
+                        break;
+                    }
+
                 case OpCode.HLT:
                     _halted = true;
                     break;
+
+                case OpCode.AND:
+                    {
+                        byte addr = ReadNextByte();
+                        _registers.ACC = _alu.And(_registers.ACC, _memory.ReadByte(addr));
+                        break;
+                    }
+
+                case OpCode.OR:
+                    {
+                        byte addr = ReadNextByte();
+                        _registers.ACC = _alu.Or(_registers.ACC, _memory.ReadByte(addr));
+                        break;
+                    }
+
+                case OpCode.XOR:
+                    {
+                        byte addr = ReadNextByte();
+                        _registers.ACC = _alu.Xor(_registers.ACC, _memory.ReadByte(addr));
+                        break;
+                    }
+                case OpCode.NOT:
+                    {
+                        _registers.ACC = _alu.Not(_registers.ACC);
+                        break;
+                    }
 
                 default:
                     throw new InvalidOperationException($"Unknown opcode {opcode:X2}");
