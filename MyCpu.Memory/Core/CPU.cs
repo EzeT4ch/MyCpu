@@ -23,7 +23,7 @@ namespace MyCpu.Domain.Core
             for (int i = 0; i < program.Length; i++)
                 _memory.WriteByte(startAddress + i, program[i]);
 
-            _registers.PC = (ushort)startAddress;
+            _registers.PC.Set(startAddress);
         }
 
         public void Run()
@@ -34,12 +34,18 @@ namespace MyCpu.Domain.Core
             }
         }
 
+        private byte ReadNextByte()
+        {
+            byte val = _memory.ReadByte(_registers.PC.Value);
+            _registers.PC.Increment();
+            return val;
+        }
+
         public void Step()
         {
             // Fetch
-            byte opcode = _memory.ReadByte(_registers.PC);
+            byte opcode = ReadNextByte();
             _registers.IR = opcode;
-            _registers.PC++;
 
             // Decode & Execute
             switch ((OpCode)opcode)
@@ -49,36 +55,36 @@ namespace MyCpu.Domain.Core
 
                 case OpCode.LDA:
                     {
-                        byte addr = _memory.ReadByte(_registers.PC++);
+                        byte addr = ReadNextByte();
                         _registers.ACC = _memory.ReadByte(addr);
                         break;
                     }
 
                 case OpCode.STA:
                     {
-                        byte addr = _memory.ReadByte(_registers.PC++);
+                        byte addr = ReadNextByte();
                         _memory.WriteByte(addr, _registers.ACC);
                         break;
                     }
 
                 case OpCode.ADD:
                     {
-                        byte addr = _memory.ReadByte(_registers.PC++);
+                        byte addr = ReadNextByte();
                         _registers.ACC = _alu.Add(_registers.ACC, _memory.ReadByte(addr));
                         break;
                     }
 
                 case OpCode.SUB:
                     {
-                        byte addr = _memory.ReadByte(_registers.PC++);
+                        byte addr = ReadNextByte();
                         _registers.ACC = _alu.Sub(_registers.ACC, _memory.ReadByte(addr));
                         break;
                     }
 
                 case OpCode.JMP:
                     {
-                        byte addr = _memory.ReadByte(_registers.PC++);
-                        _registers.PC = addr;
+                        byte addr = ReadNextByte();
+                        _registers.PC.Set(addr);
                         break;
                     }
 

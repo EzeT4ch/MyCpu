@@ -5,7 +5,7 @@ namespace MyCpu.Domain.Interfaces
     public interface IRegisters
     {
         byte ACC { get; set; }
-        ushort PC { get; set; }
+        IProgramCounter PC { get; set; }
         byte IR { get; set; }
         byte SP { get; set; }
         Flags Flags { get; }
