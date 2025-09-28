@@ -12,7 +12,6 @@ namespace MyCpu.Domain.Core
         private bool _halted;
         public const int ProgramStart = 0x10;
 
-
         public CPU(IMemory memory, IRegisters registers, IALU alu)
         {
             _memory = memory;
@@ -142,6 +141,23 @@ namespace MyCpu.Domain.Core
                         AluResult result = _alu.Not(_registers.ACC.Value);
                         _registers.ACC.Value = result.Value;
                         _registers.ApplyFlags(result.Flags);
+                        break;
+                    }
+                case OpCode.PUSH:
+                    {
+                        _registers.SP.Push();
+                        _memory.WriteByte(_registers.SP.Value, _registers.ACC.Value);
+                        break;
+                    }
+                case OpCode.POP:
+                    {
+                        byte value = _memory.ReadByte(_registers.SP.Value);
+                        _registers.SP.Pop();
+                        _registers.ACC.Value = value;
+
+
+                        _registers.SetFlag(Flags.Zero, value == 0);
+                        _registers.SetFlag(Flags.Negative, (value & 0x80) != 0);
                         break;
                     }
 

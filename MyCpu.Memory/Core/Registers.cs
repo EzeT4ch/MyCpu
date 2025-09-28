@@ -3,14 +3,14 @@ using MyCpu.Shared.Interfaces;
 
 namespace MyCpu.Domain.Core
 {
-    public class Registers : IRegisters
+    public sealed class Registers : IRegisters
     {
         public IRegisterAcc ACC { get; set; }
         public IProgramCounter PC { get; set; }
 
         public byte IR { get; set; }
 
-        public byte SP { get; set; }
+        public IStackPointer SP { get; set; }
 
         public Flags Flags { get; private set; }
 
@@ -18,6 +18,7 @@ namespace MyCpu.Domain.Core
         {
             ACC = new RegisterAcc(this);
             PC = new ProgramCounter(memorySize);
+            SP = new StackPointer();
             Clear();
         }
 
@@ -36,7 +37,7 @@ namespace MyCpu.Domain.Core
             ((RegisterAcc)ACC).Reset();
             PC.Reset();
             IR = 0;
-            SP = 0xFF; // convención: stack crece hacia abajo o eso encontre
+            SP.Reset(); // convención: stack crece hacia abajo o eso encontre
             Flags = Flags.None;
         }
 

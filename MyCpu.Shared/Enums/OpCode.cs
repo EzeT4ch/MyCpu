@@ -13,6 +13,8 @@
         XOR = 0x08,
         NOT = 0x09,
         CMP = 0x0A,
-        HLT = 0xFF
+        HLT = 0xFF,
+        POP = 0x0C,
+        PUSH = 0x0B,
     }
 }

@@ -4,7 +4,7 @@ using MyCpu.Shared.Structures;
 
 namespace MyCpu.Domain.Core
 {
-    public class ALU : IALU
+    public sealed class ALU : IALU
     {
 
         /// <summary>

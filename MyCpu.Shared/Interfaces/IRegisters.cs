@@ -7,7 +7,7 @@ namespace MyCpu.Shared.Interfaces
         IRegisterAcc ACC { get; set; }
         IProgramCounter PC { get; set; }
         byte IR { get; set; }
-        byte SP { get; set; }
+        IStackPointer SP { get; set; }
         Flags Flags { get; }
         void SetFlag(Flags flag, bool value);
         void ApplyFlags(Flags flags);

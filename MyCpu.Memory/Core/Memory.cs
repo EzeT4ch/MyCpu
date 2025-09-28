@@ -2,7 +2,7 @@
 
 namespace MyCpu.Domain.Core
 {
-    public class Memory : IMemory
+    public sealed class Memory : IMemory
     {
         private readonly byte[] _data;
         private readonly int Size;

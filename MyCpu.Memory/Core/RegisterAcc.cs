@@ -3,7 +3,7 @@ using MyCpu.Shared.Interfaces;
 
 namespace MyCpu.Domain.Core
 {
-    public class RegisterAcc(IRegisters registers) : IRegisterAcc
+    public sealed class RegisterAcc(IRegisters registers) : IRegisterAcc
     {
         private byte _value;
         private readonly IRegisters _registers = registers;

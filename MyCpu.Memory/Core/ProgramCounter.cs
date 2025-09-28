@@ -2,7 +2,7 @@
 
 namespace MyCpu.Domain.Core
 {
-    public class ProgramCounter : IProgramCounter
+    public sealed class ProgramCounter : IProgramCounter
     {
         private readonly int _maxAddress;
 
