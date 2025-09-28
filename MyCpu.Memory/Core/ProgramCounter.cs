@@ -5,6 +5,7 @@ namespace MyCpu.Domain.Core
     public class ProgramCounter : IProgramCounter
     {
         private readonly int _maxAddress;
+
         private int _value;
 
         public ProgramCounter(int maxAddress)
@@ -30,7 +31,7 @@ namespace MyCpu.Domain.Core
 
         public void Reset()
         {
-            _value = 0;
+            _value = 0x100;
         }
     }
 }

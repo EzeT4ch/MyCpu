@@ -26,6 +26,11 @@ namespace MyCpu.Domain.Core
             _registers.ApplyFlags(flags);
         }
 
+        public void Reset()
+        {
+            _value = 0;
+        }
+
         public Flags CurrentFlags => _registers.Flags;
     }
 }

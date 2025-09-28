@@ -14,7 +14,7 @@ namespace MyCpu.Domain.Core
 
         public Flags Flags { get; private set; }
 
-        public Registers(int memorySize = 256)
+        public Registers(int memorySize = 512)
         {
             ACC = new RegisterAcc(this);
             PC = new ProgramCounter(memorySize);
@@ -33,7 +33,7 @@ namespace MyCpu.Domain.Core
 
         public void Clear()
         {
-            ACC.Value = 0;
+            ((RegisterAcc)ACC).Reset();
             PC.Reset();
             IR = 0;
             SP = 0xFF; // convención: stack crece hacia abajo o eso encontre

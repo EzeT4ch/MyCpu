@@ -10,6 +10,8 @@ namespace MyCpu.Domain.Core
         private readonly IRegisters _registers;
         private readonly IALU _alu;
         private bool _halted;
+        public const int ProgramStart = 0x10;
+
 
         public CPU(IMemory memory, IRegisters registers, IALU alu)
         {
@@ -21,11 +23,14 @@ namespace MyCpu.Domain.Core
 
         public void LoadProgram(byte[] program, int startAddress = 0)
         {
-            for (int i = 0; i < program.Length; i++)
-                _memory.WriteByte(startAddress + i, program[i]);
+            int loadAddr = startAddress == 0 ? ProgramStart : startAddress;
 
-            _registers.PC.Set(startAddress);
+            for (int i = 0; i < program.Length; i++)
+                _memory.WriteByte(loadAddr + i, program[i]);
+
+            _registers.PC.Set(loadAddr);
         }
+
 
         public void Run()
         {

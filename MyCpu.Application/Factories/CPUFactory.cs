@@ -5,7 +5,7 @@ namespace MyCpu.Application.Factories;
 
 public static class CPUFactory
 {
-    public static CPU CreateCPU(int memorySize = 256)
+    public static CPU CreateCPU(int memorySize = 512)
     {
         Registers registers = new ();
         Domain.Core.Memory memory = new (memorySize);
@@ -14,7 +14,7 @@ public static class CPUFactory
         return new CPU(memory, registers, alu);
     }
 
-    public static CPU CreateCPUWithComponents(out IMemory memory, out IRegisters registers, int memorySize = 256)
+    public static CPU CreateCPUWithComponents(out IMemory memory, out IRegisters registers, int memorySize = 512)
     {
         registers = new Registers();
         memory = new Memory(memorySize);
